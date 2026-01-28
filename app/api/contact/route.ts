@@ -48,6 +48,10 @@ export async function POST(req: NextRequest) {
     const minScore = Number(process.env.RECAPTCHA_MIN_SCORE || 0.5);
 
     if (!ver.success) {
+      console.error("reCAPTCHA verification failed:", {
+        errorCodes: ver["error-codes"],
+        hostname: ver.hostname,
+      });
       return NextResponse.json(
         { error: "reCAPTCHAに失敗しました" },
         { status: 403 }
@@ -118,7 +122,11 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ ok: true });
   } catch (err) {
-    console.error("Contact API error:", err);
+    console.error("Contact API error:", {
+      message: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+      name: err instanceof Error ? err.name : undefined,
+    });
     return NextResponse.json(
       { error: "サーバー側でエラーが発生しました" },
       { status: 500 }

@@ -12,7 +12,11 @@ export function getTransporter() {
   const pass = process.env.SMTP_PASS;
 
   if (!host || !user || !pass) {
-    throw new Error("SMTP configuration is incomplete.");
+    const missing = [];
+    if (!host) missing.push("SMTP_HOST");
+    if (!user) missing.push("SMTP_USER");
+    if (!pass) missing.push("SMTP_PASS");
+    throw new Error(`SMTP configuration is incomplete. Missing: ${missing.join(", ")}`);
   }
 
   cachedTransporter = nodemailer.createTransport({
