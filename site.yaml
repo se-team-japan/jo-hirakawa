@@ -1,0 +1,188 @@
+# cursor-spec-mvp.yaml
+project:
+  name: talent-official-mvp-lp
+  phase: "MVP"
+  goal:
+    - "LP1枚で世界観（白基調×黒字×余白×タイポ）を最短で形にする"
+    - "ニュースは静的（タイトルのみ）でOK。後からCMS化できる構造を残す"
+    - "連絡手段はメールのみ"
+  design_direction:
+    theme: "white-minimal"
+    keywords: ["monochrome", "clean", "editorial", "spacing", "typography"]
+    base_style:
+      background: "#FFFFFF"
+      text: "#000000"
+      accent: "#000000"
+      border: "thin"
+      shadow: "none or subtle"
+    typography:
+      display_font: "Inter (fallback: system-ui)"
+      body_font: "Noto Sans JP (fallback: system-ui)"
+      heading_style: "uppercase + letter-spacing"
+      body_style: "jp readable + generous line-height"
+    layout:
+      max_width: "1100-1200px"
+      gutter: "24px"
+      section_spacing: "80-120px (desktop), 56-80px (mobile)"
+
+stack:
+  framework: "Next.js (App Router)"
+  language: "TypeScript"
+  styling: "Tailwind CSS"
+  animation:
+    use: true
+    library: "Framer Motion (minimal)"
+    rules:
+      - "初回ロードでフェードイン（opacity + y）"
+      - "ホバーで写真わずかに拡大"
+  deploy: "Vercel"
+  runtime: "Node.js LTS"
+
+repo:
+  structure:
+    - "app/page.tsx"
+    - "app/layout.tsx"
+    - "app/globals.css"
+    - "components/sections/*"
+    - "components/ui/*"
+    - "content/static/news.json"
+    - "content/static/profile.json"
+    - "content/static/site.json"
+
+routing:
+  type: "single_page"
+  routes:
+    - path: "/"
+      sections_order:
+        - "Header"
+        - "MV (Hero)"
+        - "Profile (Simple)"
+        - "News (Title list / static)"
+        - "Contact (Mail only)"
+        - "Footer"
+
+content_static:
+  files:
+    site:
+      path: "content/static/site.json"
+      fields:
+        - key: "siteTitle"
+          example: "TALENT OFFICIAL"
+        - key: "logoText"
+          example: "TALENT"
+        - key: "nav"
+          example: ["TOP", "PROFILE", "NEWS", "CONTACT"]
+        - key: "social"
+          example:
+            instagram: "https://instagram.com/xxx"
+            x: ""
+    profile:
+      path: "content/static/profile.json"
+      fields:
+        - key: "name"
+          example: "TALENT NAME"
+        - key: "nameJa"
+          example: "タレント名"
+        - key: "oneLiner"
+          example: "Actor / Performer"
+        - key: "bioShort"
+          example: "短いプロフィール文（2〜4行）"
+        - key: "portrait"
+          example: "/images/portrait.jpg"
+    news:
+      path: "content/static/news.json"
+      fields:
+        - key: "items"
+          type: "array"
+          example:
+            - date: "2026.01.21"
+              title: "ニュースタイトルをここに"
+            - date: "2026.01.10"
+              title: "ニュースタイトルをここに"
+
+sections_spec:
+  Header:
+    requirements:
+      - "上部固定でも通常でもOK（MVPは通常で十分）"
+      - "右側に簡易ナビ（アンカーリンク）"
+      - "白背景・黒文字・下線または細いボーダー"
+    anchors:
+      - { label: "TOP", href: "#top" }
+      - { label: "PROFILE", href: "#profile" }
+      - { label: "NEWS", href: "#news" }
+      - { label: "CONTACT", href: "#contact" }
+
+  MV:
+    id: "top"
+    requirements:
+      - "画面上部に大きなビジュアル（画像 or ループ動画）"
+      - "上に大きめタイポ（名前/短いコピー）"
+      - "写真が主役。余白・タイポでスタイリッシュに見せる"
+    assets:
+      - "public/images/hero.jpg (or hero.mp4)"
+    behavior:
+      - "初回フェードイン"
+      - "スクロールで次セクションへ自然につながる"
+
+  Profile:
+    id: "profile"
+    requirements:
+      - "写真 + テキストの2カラム（モバイルは縦積み）"
+      - "テキストは短め（MVPなので作り込みすぎない）"
+    fields_source: "content/static/profile.json"
+    layout:
+      desktop: "media left, text right (or reverse)"
+      mobile: "stack"
+
+  News:
+    id: "news"
+    requirements:
+      - "日付 + タイトルのみ（リンクなしでOK）"
+      - "見出しは英字（INFORMATION / NEWS）"
+      - "MOREは無し（MVPでは不要）"
+    fields_source: "content/static/news.json"
+    ui:
+      list_style: "thin border rows"
+      hover: "opacity change only"
+
+  Contact:
+    id: "contact"
+    requirements:
+      - "メールアドレス表示（クリックでmailto）"
+      - "注意文（返信できない場合があります等）を1行"
+    fields:
+      email: "contact@example.com (仮)"
+      note: "※お問い合わせ内容によっては返信できない場合があります。"
+
+  Footer:
+    requirements:
+      - "著作権表記"
+      - "簡易注意文（無断転載禁止など）"
+      - "ポリシーはMVPではリンクなしでもOK（後で追加）"
+
+ui_components:
+  minimum_set:
+    - "Container (maxWidth + padding)"
+    - "SectionTitle (EN + JP optional)"
+    - "Button/Link (underline style)"
+    - "Divider (thin line)"
+    - "FadeIn wrapper (Framer Motion)"
+
+non_goals_mvp:
+  - "microCMS連携"
+  - "ニュース詳細ページ"
+  - "検索・タグ"
+  - "ファンクラブ（ログイン/課金）"
+  - "フォーム送信（メールのみ）"
+
+acceptance_criteria:
+  - "LP1枚で破綻なく表示（SP/PC）"
+  - "白基調×黒字で“余白とタイポ”が効いている"
+  - "MV→Profile→News→Contact の流れが気持ちよく繋がる"
+  - "ニュースタイトルは後から差し替えしやすい（JSONで管理）"
+
+migration_plan_to_full:
+  - "Newsを microCMS に移行（JSON→CMS）"
+  - "News詳細ページ追加"
+  - "Schedule/Works/Galleryを追加"
+  - "fanclub 名前空間を確保し段階的に導入"

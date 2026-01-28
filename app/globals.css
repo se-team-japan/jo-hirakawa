@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap');
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-white text-black font-body antialiased;
+  }
+}
+
+@layer components {
+  .section-title {
+    @apply font-display text-sm uppercase tracking-wider mb-8 md:mb-12;
+  }
+  
+  .link-underline {
+    @apply underline decoration-1 underline-offset-4 hover:opacity-70 transition-opacity;
+  }
+}
+
+
+
+
