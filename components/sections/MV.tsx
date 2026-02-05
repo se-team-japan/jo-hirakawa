@@ -17,7 +17,7 @@ export default function MV() {
             alt={profileData.name}
             fill
             priority
-            className="object-cover"
+            className="object-cover object-[30%]"
             sizes="100vw"
           />
         ) : (
