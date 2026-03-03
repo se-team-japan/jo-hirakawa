@@ -9,6 +9,7 @@ import Image from 'next/image';
 export default function Profile() {
   const portrait = profileData.portrait || '/images/portrait.jpg';
   const displayName = profileData.nameJa || profileData.name;
+  const displayNameEn = profileData.name || "";
 
   return (
     <section id="profile" className="py-16 md:py-24">
@@ -39,6 +40,9 @@ export default function Profile() {
                 <h3 className="font-display text-2xl md:text-3xl uppercase tracking-wider mb-2">
                   {displayName}
                 </h3>
+                <p className="font-display text-xl md:text-2xl tracking-wider mb-4">
+                  {displayNameEn}
+                </p>
                 <p className="font-display text-sm uppercase tracking-widest text-black/60 mb-6">
                   {profileData.oneLiner}
                 </p>
